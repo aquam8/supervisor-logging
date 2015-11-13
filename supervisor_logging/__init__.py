@@ -34,10 +34,7 @@ class PalletFormatter(logging.Formatter):
     A formatter for the Pallet environment.
     """
 
-    HOSTNAME = re.sub(
-        r':\d+$', '', os.environ.get('SITE_DOMAIN', socket.gethostname()))
-    FORMAT = '%(asctime)s {hostname} %(name)s[%(process)d]: %(message)s'.\
-        format(hostname=HOSTNAME)
+    FORMAT = '%(message)s'
     DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
     converter = time.gmtime
@@ -54,13 +51,6 @@ class PalletFormatter(logging.Formatter):
         formatted = super(PalletFormatter, self).formatTime(
             record, datefmt=datefmt)
         return formatted + '.%03dZ' % record.msecs
-
-    def format(self, record):
-        # strip newlines
-        message = super(PalletFormatter, self).format(record)
-        message = message.replace('\n', ' ')
-        message += '\n'
-        return message
 
 
 def get_headers(line):
